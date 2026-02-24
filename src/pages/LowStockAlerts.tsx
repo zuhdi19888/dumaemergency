@@ -6,6 +6,7 @@ import { AlertTriangle, Pill, Package, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import type { Medicine } from '@/types/clinic';
 import { useNavigate } from 'react-router-dom';
+import { PageHeader } from '@/components/layout/PageHeader';
 
 export default function LowStockAlerts() {
   const { toast } = useToast();
@@ -46,12 +47,10 @@ export default function LowStockAlerts() {
 
   return (
     <div className="space-y-6 animate-fade-in">
-      <div>
-        <h1 className="page-header">Low Stock Alerts</h1>
-        <p className="mt-1 text-muted-foreground">
-          Medicines that need to be restocked ({lowStockMedicines.length} items)
-        </p>
-      </div>
+      <PageHeader
+        title="Low Stock Alerts"
+        subtitle={`Medicines that need to be restocked (${lowStockMedicines.length} items)`}
+      />
 
       {lowStockMedicines.length === 0 ? (
         <Card>

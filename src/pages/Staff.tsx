@@ -28,6 +28,7 @@ import {
 import { Search, Edit, Loader2, UserCog } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import type { Profile, AppRole, UserRole } from '@/types/clinic';
+import { PageHeader } from '@/components/layout/PageHeader';
 
 interface StaffMember extends Profile {
   user_roles?: UserRole[];
@@ -154,12 +155,10 @@ export default function Staff() {
 
   return (
     <div className="space-y-6 animate-fade-in">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="page-header">Staff Management</h1>
-          <p className="mt-1 text-muted-foreground">Manage staff accounts and roles</p>
-        </div>
-      </div>
+      <PageHeader
+        title="Staff Management"
+        subtitle="Manage staff accounts and roles"
+      />
 
       {/* Search */}
       <div className="relative max-w-sm">

@@ -23,6 +23,13 @@ import { Textarea } from '@/components/ui/textarea';
 import { Plus, Search, Edit, Trash2, Loader2, Package } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import type { Medicine } from '@/types/clinic';
+import { PageHeader } from '@/components/layout/PageHeader';
+
+const currencyFormatter = new Intl.NumberFormat('he-IL', {
+  style: 'currency',
+  currency: 'ILS',
+  maximumFractionDigits: 2,
+});
 
 export default function Inventory() {
   const { hasRole } = useAuth();
@@ -174,132 +181,135 @@ export default function Inventory() {
 
   return (
     <div className="space-y-6 animate-fade-in">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="page-header">Inventory</h1>
-          <p className="mt-1 text-muted-foreground">Manage medicine inventory and stock</p>
-        </div>
-        {hasRole(['admin', 'pharmacist']) && (
-          <Dialog open={isDialogOpen} onOpenChange={(open) => {
-            setIsDialogOpen(open);
-            if (!open) resetForm();
-          }}>
-            <DialogTrigger asChild>
-              <Button>
-                <Plus className="mr-2 h-4 w-4" />
-                Add Medicine
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-lg">
-              <DialogHeader>
-                <DialogTitle>
-                  {editingMedicine ? 'Edit Medicine' : 'New Medicine'}
-                </DialogTitle>
-              </DialogHeader>
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="name">Name *</Label>
-                  <Input
-                    id="name"
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="generic_name">Generic Name</Label>
-                  <Input
-                    id="generic_name"
-                    value={formData.generic_name}
-                    onChange={(e) => setFormData({ ...formData, generic_name: e.target.value })}
-                  />
-                </div>
-                <div className="grid gap-4 sm:grid-cols-2">
+      <PageHeader
+        title="Inventory"
+        subtitle="Manage medicine inventory and stock"
+        action={
+          hasRole(['admin', 'pharmacist']) && (
+            <Dialog
+              open={isDialogOpen}
+              onOpenChange={(open) => {
+                setIsDialogOpen(open);
+                if (!open) resetForm();
+              }}
+            >
+              <DialogTrigger asChild>
+                <Button>
+                  <Plus className="mr-2 h-4 w-4" />
+                  Add Medicine
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-lg">
+                <DialogHeader>
+                  <DialogTitle>
+                    {editingMedicine ? 'Edit Medicine' : 'New Medicine'}
+                  </DialogTitle>
+                </DialogHeader>
+                <form onSubmit={handleSubmit} className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="category">Category</Label>
+                    <Label htmlFor="name">Name *</Label>
                     <Input
-                      id="category"
-                      value={formData.category}
-                      onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                      placeholder="e.g., Antibiotics"
+                      id="name"
+                      value={formData.name}
+                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      required
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="unit">Unit</Label>
+                    <Label htmlFor="generic_name">Generic Name</Label>
                     <Input
-                      id="unit"
-                      value={formData.unit}
-                      onChange={(e) => setFormData({ ...formData, unit: e.target.value })}
-                      placeholder="e.g., tablet, ml, mg"
+                      id="generic_name"
+                      value={formData.generic_name}
+                      onChange={(e) => setFormData({ ...formData, generic_name: e.target.value })}
                     />
                   </div>
-                </div>
-                <div className="grid gap-4 sm:grid-cols-2">
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <div className="space-y-2">
+                      <Label htmlFor="category">Category</Label>
+                      <Input
+                        id="category"
+                        value={formData.category}
+                        onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                        placeholder="e.g., Antibiotics"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="unit">Unit</Label>
+                      <Input
+                        id="unit"
+                        value={formData.unit}
+                        onChange={(e) => setFormData({ ...formData, unit: e.target.value })}
+                        placeholder="e.g., tablet, ml, mg"
+                      />
+                    </div>
+                  </div>
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <div className="space-y-2">
+                      <Label htmlFor="stock_quantity">Initial Stock</Label>
+                      <Input
+                        id="stock_quantity"
+                        type="number"
+                        min="0"
+                        value={formData.stock_quantity}
+                        onChange={(e) => setFormData({ ...formData, stock_quantity: parseInt(e.target.value) || 0 })}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="low_stock_threshold">Low Stock Threshold</Label>
+                      <Input
+                        id="low_stock_threshold"
+                        type="number"
+                        min="0"
+                        value={formData.low_stock_threshold}
+                        onChange={(e) => setFormData({ ...formData, low_stock_threshold: parseInt(e.target.value) || 0 })}
+                      />
+                    </div>
+                  </div>
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <div className="space-y-2">
+                      <Label htmlFor="unit_price">Unit Price</Label>
+                      <Input
+                        id="unit_price"
+                        type="number"
+                        min="0"
+                        step="0.01"
+                        value={formData.unit_price}
+                        onChange={(e) => setFormData({ ...formData, unit_price: parseFloat(e.target.value) || 0 })}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="expiry_date">Expiry Date</Label>
+                      <Input
+                        id="expiry_date"
+                        type="date"
+                        value={formData.expiry_date}
+                        onChange={(e) => setFormData({ ...formData, expiry_date: e.target.value })}
+                      />
+                    </div>
+                  </div>
                   <div className="space-y-2">
-                    <Label htmlFor="stock_quantity">Initial Stock</Label>
-                    <Input
-                      id="stock_quantity"
-                      type="number"
-                      min="0"
-                      value={formData.stock_quantity}
-                      onChange={(e) => setFormData({ ...formData, stock_quantity: parseInt(e.target.value) || 0 })}
+                    <Label htmlFor="description">Description</Label>
+                    <Textarea
+                      id="description"
+                      value={formData.description}
+                      onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                     />
                   </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="low_stock_threshold">Low Stock Threshold</Label>
-                    <Input
-                      id="low_stock_threshold"
-                      type="number"
-                      min="0"
-                      value={formData.low_stock_threshold}
-                      onChange={(e) => setFormData({ ...formData, low_stock_threshold: parseInt(e.target.value) || 0 })}
-                    />
+                  <div className="flex justify-end gap-3">
+                    <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>
+                      Cancel
+                    </Button>
+                    <Button type="submit" disabled={isSaving}>
+                      {isSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                      {editingMedicine ? 'Update' : 'Create'}
+                    </Button>
                   </div>
-                </div>
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <div className="space-y-2">
-                    <Label htmlFor="unit_price">Unit Price</Label>
-                    <Input
-                      id="unit_price"
-                      type="number"
-                      min="0"
-                      step="0.01"
-                      value={formData.unit_price}
-                      onChange={(e) => setFormData({ ...formData, unit_price: parseFloat(e.target.value) || 0 })}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="expiry_date">Expiry Date</Label>
-                    <Input
-                      id="expiry_date"
-                      type="date"
-                      value={formData.expiry_date}
-                      onChange={(e) => setFormData({ ...formData, expiry_date: e.target.value })}
-                    />
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="description">Description</Label>
-                  <Textarea
-                    id="description"
-                    value={formData.description}
-                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  />
-                </div>
-                <div className="flex justify-end gap-3">
-                  <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>
-                    Cancel
-                  </Button>
-                  <Button type="submit" disabled={isSaving}>
-                    {isSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                    {editingMedicine ? 'Update' : 'Create'}
-                  </Button>
-                </div>
-              </form>
-            </DialogContent>
-          </Dialog>
-        )}
-      </div>
+                </form>
+              </DialogContent>
+            </Dialog>
+          )
+        }
+      />
 
       {/* Search */}
       <div className="relative max-w-sm">
@@ -357,7 +367,7 @@ export default function Inventory() {
                       {medicine.stock_quantity}
                     </span>
                   </TableCell>
-                  <TableCell>${medicine.unit_price?.toFixed(2) || '0.00'}</TableCell>
+                  <TableCell>{currencyFormatter.format(Number(medicine.unit_price) || 0)}</TableCell>
                   <TableCell>
                     {medicine.expiry_date
                       ? new Date(medicine.expiry_date).toLocaleDateString()
@@ -460,3 +470,4 @@ export default function Inventory() {
     </div>
   );
 }
+

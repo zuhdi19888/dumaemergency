@@ -21,6 +21,7 @@ export interface Patient {
   email: string | null;
   address: string | null;
   blood_type: string | null;
+  spo2: number | null;
   allergies: string | null;
   notes: string | null;
   created_by: string | null;
@@ -47,6 +48,7 @@ export interface Visit {
   id: string;
   patient_id: string;
   visit_date: string;
+  is_home_visit: boolean;
   chief_complaint: string | null;
   diagnosis: string | null;
   notes: string | null;
@@ -56,8 +58,12 @@ export interface Visit {
     pulse?: string;
     weight?: string;
     height?: string;
+    spo2?: string;
   };
   status: 'pending' | 'in_progress' | 'completed' | 'cancelled';
+  paid_amount: number;
+  paid_collected_by?: string | null;
+  paid_collected_at?: string | null;
   doctor_id: string | null;
   created_by: string | null;
   created_at: string;
@@ -68,6 +74,7 @@ export interface Visit {
 export interface Prescription {
   id: string;
   visit_id: string;
+  paid_amount?: number;
   prescription_date: string;
   notes: string | null;
   status: 'pending' | 'dispensed' | 'cancelled';
@@ -83,14 +90,16 @@ export interface Prescription {
 export interface PrescriptionItem {
   id: string;
   prescription_id: string;
-  medicine_id: string;
+  medicine_id: string | null;
+  is_external_purchase: boolean;
+  external_medicine_name: string | null;
   quantity: number;
   dosage: string | null;
   frequency: string | null;
   duration: string | null;
   instructions: string | null;
   created_at: string;
-  medicine?: Medicine;
+  medicine?: Medicine | null;
 }
 
 export interface InventoryTransaction {

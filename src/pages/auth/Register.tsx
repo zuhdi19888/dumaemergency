@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -15,6 +16,7 @@ export default function Register() {
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const { signUp } = useAuth();
+  const { t } = useLanguage();
   const { toast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -26,14 +28,14 @@ export default function Register() {
     if (error) {
       toast({
         variant: 'destructive',
-        title: 'Registration Failed',
+        title: t('فشل إنشاء الحساب', 'Registration Failed'),
         description: error.message,
       });
     } else {
       setIsSuccess(true);
       toast({
-        title: 'Registration Successful',
-        description: 'Please check your email to verify your account.',
+        title: t('تم إنشاء الحساب بنجاح', 'Registration Successful'),
+        description: t('يرجى التحقق من بريدك الإلكتروني لتفعيل الحساب.', 'Please check your email to verify your account.'),
       });
     }
 
@@ -48,19 +50,20 @@ export default function Register() {
             <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-success/10">
               <CheckCircle className="h-7 w-7 text-success" />
             </div>
-            <CardTitle className="text-2xl font-semibold">Check Your Email</CardTitle>
+            <CardTitle className="text-2xl font-semibold">{t('تحقق من بريدك الإلكتروني', 'Check Your Email')}</CardTitle>
             <CardDescription>
-              We've sent a verification link to <strong>{email}</strong>. 
-              Please click the link to verify your account.
+              {t('تم إرسال رابط التحقق إلى', "We've sent a verification link to")} <strong>{email}</strong>.
+              {' '}
+              {t('يرجى الضغط على الرابط لتفعيل حسابك.', 'Please click the link to verify your account.')}
             </CardDescription>
           </CardHeader>
           <CardContent>
             <p className="text-sm text-muted-foreground">
-              After verification, contact an administrator to assign you a role.
+              {t('بعد التفعيل، تواصل مع المدير لتعيين الصلاحية المناسبة.', 'After verification, contact an administrator to assign you a role.')}
             </p>
             <Link to="/login">
               <Button className="mt-4 w-full" variant="outline">
-                Return to Login
+                {t('العودة إلى تسجيل الدخول', 'Return to Login')}
               </Button>
             </Link>
           </CardContent>
@@ -76,26 +79,26 @@ export default function Register() {
           <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-primary">
             <Stethoscope className="h-7 w-7 text-primary-foreground" />
           </div>
-          <CardTitle className="text-2xl font-semibold">Create Account</CardTitle>
+          <CardTitle className="text-2xl font-semibold">{t('إنشاء حساب', 'Create Account')}</CardTitle>
           <CardDescription>
-            Register for MediClinic Management System
+            {t('سجّل حسابًا جديدًا في نظام إدارة العيادة', 'Register for clinic management system')}
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="fullName">Full Name</Label>
+              <Label htmlFor="fullName">{t('الاسم الكامل', 'Full Name')}</Label>
               <Input
                 id="fullName"
                 type="text"
-                placeholder="Dr. John Smith"
+                placeholder={t('د. أحمد محمد', 'Dr. John Smith')}
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
                 required
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email">{t('البريد الإلكتروني', 'Email')}</Label>
               <Input
                 id="email"
                 type="email"
@@ -106,7 +109,7 @@ export default function Register() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password">{t('كلمة المرور', 'Password')}</Label>
               <Input
                 id="password"
                 type="password"
@@ -120,18 +123,18 @@ export default function Register() {
             <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading ? (
                 <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Creating Account...
+                  <Loader2 className="ml-2 h-4 w-4 animate-spin" />
+                  {t('جاري إنشاء الحساب...', 'Creating Account...')}
                 </>
               ) : (
-                'Create Account'
+                t('إنشاء الحساب', 'Create Account')
               )}
             </Button>
           </form>
           <p className="mt-4 text-center text-sm text-muted-foreground">
-            Already have an account?{' '}
+            {t('لديك حساب بالفعل؟', 'Already have an account?')}{' '}
             <Link to="/login" className="font-medium text-primary hover:underline">
-              Sign In
+              {t('تسجيل الدخول', 'Sign In')}
             </Link>
           </p>
         </CardContent>

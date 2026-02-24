@@ -115,6 +115,7 @@ export type Database = {
           last_name: string
           notes: string | null
           phone: string | null
+          spo2: number | null
           updated_at: string
         }
         Insert: {
@@ -131,6 +132,7 @@ export type Database = {
           last_name: string
           notes?: string | null
           phone?: string | null
+          spo2?: number | null
           updated_at?: string
         }
         Update: {
@@ -147,6 +149,7 @@ export type Database = {
           last_name?: string
           notes?: string | null
           phone?: string | null
+          spo2?: number | null
           updated_at?: string
         }
         Relationships: []
@@ -156,10 +159,12 @@ export type Database = {
           created_at: string
           dosage: string | null
           duration: string | null
+          external_medicine_name: string | null
           frequency: string | null
           id: string
+          is_external_purchase: boolean
           instructions: string | null
-          medicine_id: string
+          medicine_id: string | null
           prescription_id: string
           quantity: number
         }
@@ -167,10 +172,12 @@ export type Database = {
           created_at?: string
           dosage?: string | null
           duration?: string | null
+          external_medicine_name?: string | null
           frequency?: string | null
           id?: string
+          is_external_purchase?: boolean
           instructions?: string | null
-          medicine_id: string
+          medicine_id?: string | null
           prescription_id: string
           quantity?: number
         }
@@ -178,10 +185,12 @@ export type Database = {
           created_at?: string
           dosage?: string | null
           duration?: string | null
+          external_medicine_name?: string | null
           frequency?: string | null
           id?: string
+          is_external_purchase?: boolean
           instructions?: string | null
-          medicine_id?: string
+          medicine_id?: string | null
           prescription_id?: string
           quantity?: number
         }
@@ -210,6 +219,7 @@ export type Database = {
           doctor_id: string | null
           id: string
           notes: string | null
+          paid_amount: number
           prescription_date: string
           status: string
           updated_at: string
@@ -222,6 +232,7 @@ export type Database = {
           doctor_id?: string | null
           id?: string
           notes?: string | null
+          paid_amount?: number
           prescription_date?: string
           status?: string
           updated_at?: string
@@ -234,6 +245,7 @@ export type Database = {
           doctor_id?: string | null
           id?: string
           notes?: string | null
+          paid_amount?: number
           prescription_date?: string
           status?: string
           updated_at?: string
@@ -305,7 +317,11 @@ export type Database = {
           diagnosis: string | null
           doctor_id: string | null
           id: string
+          is_home_visit: boolean
           notes: string | null
+          paid_amount: number
+          paid_collected_at: string | null
+          paid_collected_by: string | null
           patient_id: string
           status: string
           updated_at: string
@@ -319,7 +335,11 @@ export type Database = {
           diagnosis?: string | null
           doctor_id?: string | null
           id?: string
+          is_home_visit?: boolean
           notes?: string | null
+          paid_amount?: number
+          paid_collected_at?: string | null
+          paid_collected_by?: string | null
           patient_id: string
           status?: string
           updated_at?: string
@@ -333,7 +353,11 @@ export type Database = {
           diagnosis?: string | null
           doctor_id?: string | null
           id?: string
+          is_home_visit?: boolean
           notes?: string | null
+          paid_amount?: number
+          paid_collected_at?: string | null
+          paid_collected_by?: string | null
           patient_id?: string
           status?: string
           updated_at?: string
@@ -346,6 +370,13 @@ export type Database = {
             columns: ["patient_id"]
             isOneToOne: false
             referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "visits_paid_collected_by_fkey"
+            columns: ["paid_collected_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
